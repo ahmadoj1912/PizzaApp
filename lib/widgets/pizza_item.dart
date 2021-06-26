@@ -81,11 +81,13 @@ class PizzaItem extends StatelessWidget {
                                 child: Container(
                                   padding: EdgeInsets.all(5),
                                   margin: EdgeInsets.only(right: 5),
-                                  child: Text(
-                                    'Small',
-                                    style:
-                                        Theme.of(context).textTheme.headline1,
-                                    textAlign: TextAlign.center,
+                                  child: FittedBox(
+                                    child: Text(
+                                      'Small',
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -143,11 +145,13 @@ class PizzaItem extends StatelessWidget {
                                 child: Container(
                                   padding: EdgeInsets.all(5),
                                   margin: EdgeInsets.only(right: 5),
-                                  child: Text(
-                                    'Large',
-                                    style:
-                                        Theme.of(context).textTheme.headline1,
-                                    textAlign: TextAlign.center,
+                                  child: FittedBox(
+                                    child: Text(
+                                      'Large',
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -182,10 +186,12 @@ class PizzaItem extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: Theme.of(context).accentColor,
                                 borderRadius: BorderRadius.circular(10)),
-                            child: Text(
-                              'Toppings',
-                              style: Theme.of(context).textTheme.headline1,
-                              textAlign: TextAlign.center,
+                            child: FittedBox(
+                              child: Text(
+                                'Toppings',
+                                style: Theme.of(context).textTheme.headline1,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
