@@ -7,8 +7,7 @@
    <application
         android:label="pizza"
         android:icon="@mipmap/ic_launcher">
-        <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyDx3WVGNOh2VcyNGZ2--iyKo_AZShkHl0U"/>
+       
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
