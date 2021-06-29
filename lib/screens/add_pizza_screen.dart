@@ -202,13 +202,20 @@ class _AddPizzaScreenState extends State<AddPizzaScreen> {
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.2,
-                                        child: ListView.builder(
-                                            itemCount: modifiers.length,
-                                            itemBuilder: (context, index) =>
-                                                ListTile(
-                                                  title: Text(
-                                                      modifiers[index].name),
-                                                )),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  width: 2,
+                                                  color: Theme.of(context)
+                                                      .primaryColor)),
+                                          child: ListView.builder(
+                                              itemCount: modifiers.length,
+                                              itemBuilder: (context, index) =>
+                                                  ListTile(
+                                                    title: Text(
+                                                        modifiers[index].name),
+                                                  )),
+                                        ),
                                       ),
                                       ElevatedButton(
                                           onPressed: () async {
