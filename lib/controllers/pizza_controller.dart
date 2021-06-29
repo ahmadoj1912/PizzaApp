@@ -4,27 +4,43 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+class Modifier {
+  final String name;
+  final bool isRequired;
+  final int singleOrMulti;
+  List? options;
+
+  Map toJson() {
+    return {
+      'name': name,
+      'isRequired': isRequired,
+      'singleOrMulti': singleOrMulti,
+      'options': options,
+    };
+  }
+
+  Modifier({
+    required this.name,
+    required this.isRequired,
+    required this.singleOrMulti,
+    this.options,
+  });
+}
+
 class Pizza {
   final String? id;
   final String title;
   final String desc;
   final String image;
-  final List size;
-  final double smallSize;
-  final double meduimSize;
-  final double largeSize;
-  final List toppings;
+  final List<Modifier> modifiers;
 
-  Pizza(
-      {this.id,
-      required this.title,
-      required this.desc,
-      required this.image,
-      required this.size,
-      this.smallSize = 0.0,
-      this.meduimSize = 0.0,
-      this.largeSize = 0.0,
-      required this.toppings});
+  Pizza({
+    this.id,
+    required this.title,
+    required this.desc,
+    required this.image,
+    this.modifiers = const [],
+  });
 }
 
 class PizzaController extends GetxController with StateMixin {
@@ -37,25 +53,6 @@ class PizzaController extends GetxController with StateMixin {
   void onInit() async {
     await fetchProducts();
     super.onInit();
-  }
-
-  String toppingToValue(int topping) {
-    if (topping == 1) {
-      return 'mushroom';
-    }
-    if (topping == 2) {
-      return 'Sausage';
-    }
-    if (topping == 3) {
-      return 'Bacon';
-    }
-    if (topping == 4) {
-      return 'Chicken';
-    }
-    if (topping == 5) {
-      return 'Black Olives';
-    }
-    return '';
   }
 
   Future<void> fetchProducts() async {
@@ -71,15 +68,19 @@ class PizzaController extends GetxController with StateMixin {
       if (data.size > 0) {
         data.docs.forEach((item) {
           loadedData.add(Pizza(
-              id: item.id,
-              title: item['title'],
-              desc: item['description'],
-              image: item['image'],
-              size: item['sizes'],
-              smallSize: item['smallPrice'],
-              meduimSize: item['meduimPrice'],
-              largeSize: item['largePrice'],
-              toppings: item['toppings']));
+            id: item.id,
+            title: item['title'],
+            desc: item['description'],
+            image: item['image'],
+            modifiers: item['modifiers']
+                .map<Modifier>((e) => Modifier(
+                      name: e['name'],
+                      isRequired: e['isRequired'],
+                      singleOrMulti: e['singleOrMulti'],
+                      options: e['options'],
+                    ))
+                .toList(),
+          ));
         });
         _items = loadedData;
         change(_items, status: RxStatus.success());
@@ -93,8 +94,8 @@ class PizzaController extends GetxController with StateMixin {
     }
   }
 
-  Future<void> addPizza(Pizza item, File image, double smallPrice,
-      double meduimPrice, double largePrice) async {
+  Future<void> addPizza(
+      Pizza item, File image, List<Modifier> modifiers) async {
     try {
       _isLoading.value = true;
       final fileName = path.basename(image.path);
@@ -110,11 +111,7 @@ class PizzaController extends GetxController with StateMixin {
         'title': item.title,
         'description': item.desc,
         'image': imageUrl,
-        'sizes': item.size,
-        'smallPrice': smallPrice,
-        'meduimPrice': meduimPrice,
-        'largePrice': largePrice,
-        'toppings': item.toppings,
+        'modifiers': modifiers.map((i) => i.toJson()).toList(),
         'created_at': Timestamp.now(),
       });
     } catch (error) {
